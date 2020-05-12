@@ -26,9 +26,7 @@ jobs:
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
       - run: gradle :1.15.2:build
-      - run: |
-        mkdir artifacts || true
-        cp versions/1.15.2/build/libs/replaymod-1.15.2-2.3.0-dirty.jar artifacts/urmw-replay-mod-1.15.2.jar
-      
-      -store_artifacts:
+      - run: mkdir artifacts || true && cp versions/1.15.2/build/libs/replaymod-1.15.2-2.3.0-dirty.jar artifacts/urmw-replay-mod-1.15.2.jar
+
+      - store_artifacts:
         path: artifacts
