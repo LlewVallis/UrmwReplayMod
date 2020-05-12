@@ -1,6 +1,8 @@
 # URMW Replay Mod
 A modified version of the amazing Replay Mod for Unofficial Ranked Missile Wars match recording.
 
+[![CircleCI](https://circleci.com/gh/LlewVallis/UrmwReplayMod.svg?style=svg)](https://circleci.com/gh/LlewVallis/UrmwReplayMod)
+
 ## URMW Features
 * Direct messages are not picked up by the recorder. A direct message is detected with the `➛` character.
 
