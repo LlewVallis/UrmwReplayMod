@@ -30,10 +30,12 @@ import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
 import net.minecraft.network.packet.s2c.play.ItemPickupAnimationS2CPacket;
 import net.minecraft.network.packet.s2c.play.MobSpawnS2CPacket;
 import net.minecraft.network.packet.s2c.play.PlayerSpawnS2CPacket;
+import net.minecraft.network.packet.s2c.play.ChatMessageS2CPacket;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.network.NetworkState;
 import net.minecraft.network.Packet;
+import net.minecraft.text.Text;
 import net.minecraft.util.PacketByteBuf;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.crash.CrashReport;
@@ -272,6 +274,15 @@ public class PacketListener extends ChannelInboundHandlerAdapter {
         if (msg instanceof Packet) {
             try {
                 Packet packet = (Packet) msg;
+
+                // Remove any messages containing ➛ since they are likely a DM.
+                if (packet instanceof ChatMessageS2CPacket) {
+                    Text message = ((ChatMessageS2CPacket) packet).getMessage();
+                    if (message.getString().contains("➛")) {
+                        super.channelRead(ctx, msg);
+                        return;
+                    }
+                }
 
                 //#if MC>=10904
                 if(packet instanceof ItemPickupAnimationS2CPacket) {

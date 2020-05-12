@@ -1,5 +1,8 @@
-# ReplayMod
-A Minecraft mod to record game sessions and replay them afterwards from any perspective.
+# URMW Replay Mod
+A modified version of the amazing Replay Mod for Unofficial Ranked Missile Wars match recording.
+
+## URMW Features
+* Direct messages are not picked up by the recorder. A direct message is detected with the `➛` character.
 
 ## Building
 Make sure your sub-projects are up-to-date: `git submodule update --init --recursive`
@@ -84,29 +87,6 @@ Care should also be taken that switching to a different branch and back doesn't 
 Some files may use the same preprocessor with different keywords.
 If required, more file extensions and keywords can be added in the `preprocess` block of the `versions/common.gradle` script.
 
-### Versioning
-The ReplayMod uses the versioning scheme outlined [here](http://mcforge.readthedocs.io/en/latest/conventions/versioning/)
-with three changes:
-- No `MAJORAPI`, the ReplayMod does not provide any external API
-- "Updating to a new Minecraft version" should not increment `MAJORMOD`, we maintain one version of the ReplayMod
-for each version of Minecraft and all these versions share the same feature set (and most bugs). We therefore try to
-keep the version name the same for all of them (with the exception of `MCVERSION` of course). This also means that the
-"Multiple Minecraft Version" section does not apply.
-- For pre-releases the shorter `-bX` is used instead of `-betaX`
-
-When a new version is (pre-)release, a new commit modifying the `version.txt` file should be added and the
-`versions.json` file in the `master` branch should be updated. To simplify this process the gradle task `doRelease` can
-be used: `./gradlew -PreleaseVersion=2.0.0-rc1 doRelease`. It will create the commit and update the version.json
-accordingly.
-
-Care should be taken that the updated `version.json` is not pushed before a jar file is available on the
-download page (or Jenkins) as it will inform the users of the update.
-
-### Bugs
-GitHub should generally be used to report bugs.
-
-In the past, bugs were tracked via [Bugzilla](https://bugs.replaymod.com/), so bug numbers in commits prior to 2020 such as `(fixes #42)` generally referred to Bugzilla unless noted otherwise.
-
 ## License
-The ReplayMod is provided under the terms of the GNU General Public License Version 3 or (at your option) any later version.
+The URMW fork of the ReplayMod is provided under the terms of the GNU General Public License Version 3 or (at your option) any later version.
 See `LICENSE.md` for the full license text.
