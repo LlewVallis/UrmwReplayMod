@@ -28,5 +28,9 @@ jobs:
       - run: gradle :1.15.2:build
       - run: mkdir artifacts || true && cp versions/1.15.2/build/libs/replaymod-1.15.2-2.3.0-dirty.jar artifacts/urmw-replay-mod-1.15.2.jar
 
+<<<<<<< HEAD
       - store_artifacts:
+=======
+      -store_artifacts:
+>>>>>>> 99d4378efa2eea7e91aff363fb1066a18598ad68
         path: artifacts
