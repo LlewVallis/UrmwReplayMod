@@ -5,7 +5,7 @@ You can download a copy of the mod from the releases tab.
 [![CircleCI](https://circleci.com/gh/LlewVallis/UrmwReplayMod.svg?style=svg)](https://circleci.com/gh/LlewVallis/UrmwReplayMod)
 
 ## URMW Features
-* Direct messages are not picked up by the recorder. A direct message is detected with the `➛` character.
+* Sensitive messages are not picked up by the recorder. A sensitive message is any message that contains `➛` (for DMs) or `StaffChat`.
 
 ## Building
 Note, due to an issue with Forge Gradle, Java 8 must be used to build the mod.
