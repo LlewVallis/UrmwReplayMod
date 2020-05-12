@@ -1,0 +1,34 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/openjdk:8-jdk
+
+    working_directory: ~/repo
+
+    environment:
+      JVM_OPTS: -Xmx3200m
+      TERM: dumb
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "build.gradle" }}
+            - v1-dependencies-
+
+      - run: gradle :1.15.2:dependencies
+
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: v1-dependencies-{{ checksum "build.gradle" }}
+
+      - run: gradle :1.15.2:build
+      - run: |
+        mkdir artifacts || true
+        cp versions/1.15.2/build/libs/replaymod-1.15.2-2.3.0-dirty.jar artifacts/urmw-replay-mod-1.15.2.jar
+      
+      -store_artifacts:
+        path: artifacts
