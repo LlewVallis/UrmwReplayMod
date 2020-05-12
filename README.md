@@ -1,5 +1,6 @@
 # URMW Replay Mod
 A modified version of the amazing Replay Mod for Unofficial Ranked Missile Wars match recording.
+You can download a copy of the mod from the releases tab.
 
 [![CircleCI](https://circleci.com/gh/LlewVallis/UrmwReplayMod.svg?style=svg)](https://circleci.com/gh/LlewVallis/UrmwReplayMod)
 
@@ -7,9 +8,9 @@ A modified version of the amazing Replay Mod for Unofficial Ranked Missile Wars 
 * Direct messages are not picked up by the recorder. A direct message is detected with the `➛` character.
 
 ## Building
-Make sure your sub-projects are up-to-date: `git submodule update --init --recursive`
+Note, due to an issue with Forge Gradle, Java 8 must be used to build the mod.
 
-For compiling 1.7.10, you must run `./gradlew :jGui:1.7.10:setupDecompWorkspace :1.7.10:setupDecompWorkspace` once after the initial clone. This may take quite some time.
+Make sure your sub-projects are up-to-date: `git submodule update --init --recursive`
 
 ### No IDE
 You can build the mod by running `./gradlew build` (or just `./gradlew shadowJar`). You can then find the final jar files in `versions/$MCVERSION/build/libs/`.
@@ -24,8 +25,6 @@ You also need to enable the Mixin annotation processor:
 4. For Forge, set the name to "reobfSrgFile" and the value to "$path/versions/$MCVERSION/build/mcp-srg.srg" where you replace $path with the full 
 path to the folder containing the gradlew file
 4. For Fabric, set the name to "inMapFileNamedIntermediary" and the value to "$HOME/.gradle/caches/fabric-loom/mappings/net.fabricmc.yarn-tiny-$YARNVERSION" where you replace $HOME with your home folder and $YARNVERSION with the respective yarn version used by the RM
-
-### Eclipse
 
 ## Development
 ### Branches
