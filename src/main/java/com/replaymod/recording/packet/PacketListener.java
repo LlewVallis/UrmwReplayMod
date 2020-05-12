@@ -275,10 +275,10 @@ public class PacketListener extends ChannelInboundHandlerAdapter {
             try {
                 Packet packet = (Packet) msg;
 
-                // Remove any messages containing ➛ since they are likely a DM.
+                // Remove any messages containing "➛" or "StaffChat" since they are likely sensitive.
                 if (packet instanceof ChatMessageS2CPacket) {
                     Text message = ((ChatMessageS2CPacket) packet).getMessage();
-                    if (message.getString().contains("➛")) {
+                    if (message.getString().contains("➛") || message.getString().contains("StaffChat")) {
                         super.channelRead(ctx, msg);
                         return;
                     }
