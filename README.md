@@ -4,8 +4,9 @@ You can download a copy of the mod from the releases tab.
 
 [![CircleCI](https://circleci.com/gh/LlewVallis/UrmwReplayMod.svg?style=svg)](https://circleci.com/gh/LlewVallis/UrmwReplayMod)
 
-## URMW Features
+## Custom Features
 * Sensitive messages are not picked up by the recorder. A sensitive message is any message that contains `➛` (for DMs) or `StaffChat`.
+* The login page is never shown on load.
 
 ## Building
 Note, due to an issue with Forge Gradle, Java 8 must be used to build the mod.
