@@ -150,7 +150,8 @@ public class FullReplaySender extends ChannelDuplexHandler implements ReplaySend
             //#endif
             //#if MC>=10800
             SetCameraEntityS2CPacket.class,
-            TitleS2CPacket.class,
+            // Allow titles to be rendered
+            // TitleS2CPacket.class,
             //#endif
             HealthUpdateS2CPacket.class,
             OpenHorseContainerS2CPacket.class,
