@@ -66,7 +66,9 @@ public class FullBrightness extends EventRegistrations implements Extra {
     //$$ public void preRender(TickEvent.RenderTickEvent event) {
     //$$     if (event.phase != TickEvent.Phase.START) return;
     //#endif
-        if (active && module.getReplayHandler() != null) {
+
+        // Invert fullbright setting
+        if (!active && module.getReplayHandler() != null) {
             originalGamma = mc.options.gamma;
             mc.options.gamma = 1000;
         }
@@ -80,7 +82,9 @@ public class FullBrightness extends EventRegistrations implements Extra {
     //$$ public void postRender(TickEvent.RenderTickEvent event) {
     //$$     if (event.phase != TickEvent.Phase.END) return;
     //#endif
-        if (active && module.getReplayHandler() != null) {
+
+        // Invert fullbright setting
+        if (!active && module.getReplayHandler() != null) {
             mc.options.gamma = originalGamma;
         }
     }
