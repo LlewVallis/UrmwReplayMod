@@ -7,6 +7,9 @@ You can download a copy of the mod from the releases tab.
 ## Custom Features
 * Sensitive messages are not picked up by the recorder. A sensitive message is any message that contains `➛` (for DMs) or `StaffChat`.
 * The login page is never shown on load.
+* Attempting to play or render the camera path without at least two keyframes will trigger the mod to generate sensible keyframes for you.
+  The "Game has started!" chat messages and the "Green/Red Team Wins!" titles are used as anchor points for the boundaries of matches to be inferred from.
+  For this feature to work, you must be spectating a player.
 
 ## Building
 Note, due to an issue with Forge Gradle, Java 8 must be used to build the mod.
