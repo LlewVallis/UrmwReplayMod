@@ -52,6 +52,7 @@ import de.johni0702.minecraft.gui.utils.lwjgl.WritablePoint;
 import net.minecraft.util.crash.CrashReport;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.astropeci.urmwreplaymod.KeyframeGenerator;
 
 //#if MC>=11400
 //#else
@@ -541,8 +542,16 @@ public class GuiPathing {
         // Make sure there are at least two position- and two time-keyframes
         if (timeline.getPositionPath().getSegments().isEmpty()
                 || timeline.getTimePath().getSegments().isEmpty()) {
-            GuiInfoPopup.open(replayHandler.getOverlay(), "replaymod.chat.morekeyframes");
-            return false;
+
+            // GuiInfoPopup.open(replayHandler.getOverlay(), "replaymod.chat.morekeyframes");
+
+            KeyframeGenerator generator = new KeyframeGenerator(timeline, replayHandler);
+            try {
+                return generator.generate();
+            } catch (RuntimeException e) {
+                ReplayMod.instance.printWarningToChat("Error generating keyframes");
+                logger.error("Error generating keyframes", e);
+            }
         }
 
         return true;
