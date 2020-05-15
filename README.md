@@ -12,6 +12,9 @@ You can download a copy of the mod from the releases tab.
   For this feature to work, you must be spectating a player.
 * By default fullbright is enabled when entering the replay viewer.
   Can be toggled off with the normal keybind.
+* Matches can be automatically named from the escape menu in the replay viewer.
+  Autonaming a replay jumps to the beginning of the match as is inferred by the keyframe generator and reads the teams of all players.
+  The replay file is then renamed once the viewer has been exited.
 
 ## Building
 Note, due to an issue with Forge Gradle, Java 8 must be used to build the mod.

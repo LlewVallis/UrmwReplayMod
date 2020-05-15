@@ -59,6 +59,7 @@ import static com.replaymod.replay.ReplayModReplay.LOGGER;
 
 //#if MC>=11400
 import net.minecraft.text.TranslatableText;
+import org.astropeci.urmwreplaymod.ReplayListMustReloadCallback;
 //#else
 //$$ import net.minecraft.client.resources.I18n;
 //#endif

@@ -38,6 +38,7 @@ import java.util.*;
 
 //#if MC>=11500
 import com.mojang.blaze3d.systems.RenderSystem;
+import org.apache.logging.log4j.LogManager;
 import org.lwjgl.opengl.GL11;
 //#endif
 
