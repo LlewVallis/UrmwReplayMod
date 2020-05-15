@@ -10,6 +10,9 @@ You can download a copy of the mod from the releases tab.
 * Attempting to play or render the camera path without at least two keyframes will trigger the mod to generate sensible keyframes for you.
   The "Game has started!" chat messages and the "Green/Red Team Wins!" titles are used as anchor points for the boundaries of matches to be inferred from.
   For this feature to work, you must be spectating a player.
+* Matches can be automatically named from the escape menu in the replay viewer.
+  Autonaming a replay jumps to the beginning of the match as is inferred by the keyframe generator and reads the teams of all players.
+  The replay file is then renamed once the viewer has been exited.
 
 ## Building
 Note, due to an issue with Forge Gradle, Java 8 must be used to build the mod.
