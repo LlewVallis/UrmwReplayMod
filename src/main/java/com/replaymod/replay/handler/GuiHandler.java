@@ -1,25 +1,24 @@
 package com.replaymod.replay.handler;
 
-import de.johni0702.minecraft.gui.utils.EventRegistrations;
+import com.replaymod.core.ReplayMod;
 import com.replaymod.replay.ReplayModReplay;
 import com.replaymod.replay.gui.screen.GuiReplayViewer;
+import com.replaymod.simplepathing.ReplayModSimplePathing;
+import de.johni0702.minecraft.gui.element.GuiLabel;
+import de.johni0702.minecraft.gui.popup.GuiInfoPopup;
+import de.johni0702.minecraft.gui.utils.EventRegistrations;
+import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
+import de.johni0702.minecraft.gui.versions.callbacks.InitScreenCallback;
 import net.minecraft.client.gui.screen.GameMenuScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.AbstractButtonWidget;
-import net.minecraft.client.resource.language.I18n;
-
-//#if FABRIC>=1
-import de.johni0702.minecraft.gui.versions.callbacks.InitScreenCallback;
-//#else
-//$$ import net.minecraftforge.client.event.GuiScreenEvent;
-//$$ import net.minecraftforge.eventbus.api.SubscribeEvent;
-//#endif
-
-//#if MC>=11400
 import net.minecraft.client.gui.widget.ButtonWidget;
-//#endif
+import net.minecraft.client.resource.language.I18n;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.astropeci.urmwreplaymod.Autonamer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,11 +28,24 @@ import java.util.function.Consumer;
 import static com.replaymod.core.versions.MCVer.*;
 import static com.replaymod.replay.ReplayModReplay.LOGGER;
 
+//#if FABRIC>=1
+//#else
+//$$ import net.minecraftforge.client.event.GuiScreenEvent;
+//$$ import net.minecraftforge.eventbus.api.SubscribeEvent;
+//#endif
+//#if MC>=11400
+//#endif
+
 public class GuiHandler extends EventRegistrations {
     private static final int BUTTON_REPLAY_VIEWER = 17890234;
     private static final int BUTTON_EXIT_REPLAY = 17890235;
+    private static final int BUTTON_AUTONAME_REPLAY = 17890236;
 
     private final ReplayModReplay mod;
+
+    private final Logger logger = LogManager.getLogger();
+
+    private Runnable replayExitAction;
 
     public GuiHandler(ReplayModReplay mod) {
         this.mod = mod;
@@ -97,11 +109,23 @@ public class GuiHandler extends EventRegistrations {
                 if (id.equals(BUTTON_EXIT_SERVER)) {
                     // Replace "Exit Server" button with "Exit Replay" button
                     remove = true;
+
+                    addButton(guiScreen, new InjectedButton(
+                            guiScreen,
+                            BUTTON_AUTONAME_REPLAY,
+                            b.x,
+                            b.y,
+                            width(b),
+                            height(b),
+                            "Autoname replay",
+                            this::onButton
+                    ));
+
                     addButton(guiScreen, new InjectedButton(
                             guiScreen,
                             BUTTON_EXIT_REPLAY,
                             b.x,
-                            b.y,
+                            b.y + 24,
                             width(b),
                             height(b),
                             I18n.translate("replaymod.gui.exit"),
@@ -244,8 +268,20 @@ public class GuiHandler extends EventRegistrations {
                 button.active = false;
                 try {
                     mod.getReplayHandler().endReplay();
+
+                    if (replayExitAction != null) {
+                        replayExitAction.run();
+                        replayExitAction = null;
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
+                }
+            } else if (button.id == BUTTON_AUTONAME_REPLAY) {
+                try {
+                    replayExitAction = new Autonamer(mod.getReplayHandler()).createAction();
+                } catch (RuntimeException e) {
+                    logger.error("Failed to autoname match", e);
+                    ReplayMod.instance.printWarningToChat("Error autonaming match");
                 }
             }
         }

@@ -545,7 +545,7 @@ public class GuiPathing {
 
             // GuiInfoPopup.open(replayHandler.getOverlay(), "replaymod.chat.morekeyframes");
 
-            KeyframeGenerator generator = new KeyframeGenerator(timeline, replayHandler);
+            KeyframeGenerator generator = new KeyframeGenerator(replayHandler);
             try {
                 return generator.generate();
             } catch (RuntimeException e) {

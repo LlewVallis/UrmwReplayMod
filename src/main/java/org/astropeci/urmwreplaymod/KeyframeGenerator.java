@@ -4,6 +4,7 @@ import com.replaymod.core.ReplayMod;
 import com.replaymod.pathing.properties.SpectatorProperty;
 import com.replaymod.replay.ReplayHandler;
 import com.replaymod.replay.ReplayModReplay;
+import com.replaymod.replay.camera.CameraEntity;
 import com.replaymod.replaystudio.PacketData;
 import com.replaymod.replaystudio.io.ReplayInputStream;
 import com.replaymod.replaystudio.pathing.path.Keyframe;
@@ -14,14 +15,14 @@ import com.replaymod.replaystudio.protocol.PacketTypeRegistry;
 import com.replaymod.replaystudio.replay.ReplayFile;
 import com.replaymod.replaystudio.us.myles.ViaVersion.api.protocol.ProtocolVersion;
 import com.replaymod.replaystudio.us.myles.ViaVersion.packets.State;
+import com.replaymod.simplepathing.ReplayModSimplePathing;
 import com.replaymod.simplepathing.SPTimeline;
 import de.johni0702.minecraft.gui.element.GuiLabel;
 import de.johni0702.minecraft.gui.popup.GuiInfoPopup;
 import de.johni0702.minecraft.gui.utils.lwjgl.ReadableColor;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
+import lombok.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.PacketByteBuf;
@@ -38,14 +39,16 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class KeyframeGenerator {
 
-    private final SPTimeline timeline;
     private final ReplayHandler replayHandler;
     private final Logger logger = LogManager.getLogger();
 
-    @Value
-    private static class Span {
-        int start;
-        int end;
+    @AllArgsConstructor
+    public static class Span {
+        @Getter @Setter
+        private int start;
+
+        @Getter @Setter
+        private int end;
     }
 
     @Value
@@ -58,14 +61,7 @@ public class KeyframeGenerator {
         }
     }
 
-    public boolean generate() {
-        UUID spectatedUuid = ReplayModReplay.instance.getReplayHandler().getSpectatedUUID();
-
-        if (spectatedUuid == null) {
-            infoPopup("Spectate a player or manually specify keyframes");
-            return false;
-        }
-
+    public Span getMatchSpan() {
         int duration = replayHandler.getReplayDuration();
 
         List<Integer> startTimes = findStartTimes();
@@ -93,35 +89,39 @@ public class KeyframeGenerator {
                 // Shouldn't ever need, but its here if we do.
                 .orElse(new Span(0, duration));
 
-        int startTime = longestSpan.start;
-        int endTime = longestSpan.end + 10000;
+        longestSpan.end += 10000;
 
-        if (endTime > duration) {
-            endTime = duration;
+        if (longestSpan.end > duration) {
+            longestSpan.end = duration;
         }
 
-        PlayerEntity spectated = replayHandler.getCameraEntity().getEntityWorld().getPlayerByUuid(spectatedUuid);
+        return longestSpan;
+    }
 
-        Path positionPath = timeline.getPositionPath();
-        for (Keyframe keyframe : positionPath.getKeyframes()) {
-            positionPath.remove(keyframe, false);
+    public boolean generate() {
+        UUID spectatedUuid = ReplayModReplay.instance.getReplayHandler().getSpectatedUUID();
+
+        if (spectatedUuid == null) {
+            infoPopup("Spectate a player or manually specify keyframes");
+            return false;
         }
 
-        Path timePath = timeline.getTimePath();
-        for (Keyframe keyframe : timePath.getKeyframes()) {
-            timePath.remove(keyframe, false);
-        }
+        Span span = getMatchSpan();
 
-        Keyframe positionStart = positionPath.insert(0);
-        Keyframe positionEnd = positionPath.insert(endTime - startTime);
+        int startTime = span.start;
+        int endTime = span.end;
 
-        positionStart.setValue(SpectatorProperty.PROPERTY, spectated.getEntityId());
-        positionEnd.setValue(SpectatorProperty.PROPERTY, spectated.getEntityId());
+        CameraEntity camera = replayHandler.getCameraEntity();
+        PlayerEntity spectated = camera.getEntityWorld().getPlayerByUuid(spectatedUuid);
+
+        ReplayModSimplePathing.instance.clearCurrentTimeline();
+        SPTimeline timeline = ReplayModSimplePathing.instance.getCurrentTimeline();
+
+        timeline.addPositionKeyframe(0, spectated.getX(), spectated.getY(), spectated.getZ(), camera.yaw, camera.pitch, camera.roll, spectated.getEntityId());
+        timeline.addPositionKeyframe(endTime - startTime, spectated.getX(), spectated.getY(), spectated.getZ(), camera.yaw, camera.pitch, camera.roll, spectated.getEntityId());
 
         timeline.addTimeKeyframe(0, startTime);
         timeline.addTimeKeyframe(endTime - startTime, endTime);
-
-        positionPath.updateAll();
 
         infoMessage("Generated keyframes");
         return true;
