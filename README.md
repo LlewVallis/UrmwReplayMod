@@ -1,3 +1,6 @@
+# Note from maintainers
+This project is no longer supported. Some features may still work in some versions, but you use them at your own risk.
+
 # URMW Replay Mod
 A modified version of the amazing Replay Mod for Unofficial Ranked Missile Wars match recording.
 You can download a copy of the mod from the releases tab.
